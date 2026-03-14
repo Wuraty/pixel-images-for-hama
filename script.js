@@ -77,6 +77,16 @@ const HAMA_COLORS = [
     { name: "Pêche (78)", r: 252, g: 194, b: 169 },
     { name: "Prune (82)", r: 163, g: 75, b: 123 },
     { name: "Vert Olive (84)", r: 106, g: 143, b: 63 },
+    { name: "Rouge Transparent (13)", r: 184, g: 26, b: 34 },
+    { name: "Jaune Transparent (14)", r: 242, g: 191, b: 0 },
+    { name: "Bleu Foncé Transparent (15)", r: 23, g: 45, b: 96 },
+    { name: "Vert Transparent (16)", r: 35, g: 122, b: 62 },
+    { name: "Transparent (19)", r: 255, g: 255, b: 255 },
+    { name: "Vert Phosphorescent (55)", r: 35, g: 122, b: 62 },
+    { name: "Rouge Phosphorescent (56)", r: 184, g: 26, b: 34 },
+    { name: "Rose Transparent (72)", r: 226, g: 104, b: 140 },
+    { name: "Bleu Ciel Transparent (73)", r: 70, g: 135, b: 209 },
+    { name: "Lilas Transparent (74)", r: 178, g: 111, b: 174 },
 ];
 const upload = document.getElementById('upload');
 const canvas = document.getElementById('canvas');
@@ -230,23 +240,84 @@ document.getElementById('downloadBtn').onclick = function() {
     }
 };
 
-// Fonction utilitaire pour les perles
 function updateStats(w, h, data) {
     const plaquesH = Math.ceil(w / 29);
     const plaquesV = Math.ceil(h / 29);
-    document.getElementById('statsPlaques').innerHTML = `<strong>Plaques :</strong> ${plaquesH * plaquesV} (${plaquesH}x${plaquesV})`;
+    const totalPlaques = plaquesH * plaquesV;
 
+    // Affichage du besoin en plaques
+    const statsPlaquesDiv = document.getElementById('statsPlaques');
+    if (statsPlaquesDiv) {
+        statsPlaquesDiv.innerHTML = `<strong>Besoin en plaques :</strong> ${totalPlaques} (${plaquesH} x ${plaquesV})`;
+    }
+
+    // Comptage des perles
     const counts = {};
     for (let i = 0; i < data.length; i += 4) {
         const key = `${data[i]},${data[i+1]},${data[i+2]}`;
         counts[key] = (counts[key] || 0) + 1;
     }
 
-    let html = "<strong>Perles :</strong><br>";
-    HAMA_COLORS.forEach(c => {
-        const key = `${c.r},${c.g},${c.b}`;
-        if (counts[key]) html += `<span style="color:rgb(${key})">●</span> ${c.name}: ${counts[key]}<br>`;
+    // Génération de la liste des perles avec calcul des sachets et effets visuels
+    let perlesHTML = "<strong>Liste des perles :</strong><br>";
+    HAMA_COLORS.forEach(color => {
+        const key = `${color.r},${color.g},${color.b}`;
+        if (counts[key]) {
+            const nbPerles = counts[key];
+            const nbSachets = Math.ceil(nbPerles / 1000);
+            
+            // Logique pour les effets spéciaux
+            const isTransparent = color.name.toLowerCase().includes("transparent");
+            const isPhospho = color.name.toLowerCase().includes("phosphorescent");
+
+            // Paramètres de style par défaut
+            let opacity = "1";
+            let glow = "1px 1px 2px black";
+            let border = "";
+
+            if (isTransparent) {
+                opacity = "0.5";
+                glow = "none";
+                border = "border: 1px solid rgba(0,0,0,0.2); border-radius: 50%;";
+            }
+
+            if (isPhospho) {
+                // Effet de lueur jaune/vert fluo pour les phosphorescentes
+                glow = "0 0 10px rgba(200, 255, 0, 0.9), 0 0 3px rgba(0, 0, 0, 0.5)";
+            }
+
+            perlesHTML += `
+                <div style="margin-bottom: 5px; display: flex; align-items: center;">
+                    <span style="
+                        color: rgb(${key}); 
+                        opacity: ${opacity}; 
+                        text-shadow: ${glow};
+                        ${border}
+                        width: 14px;
+                        height: 14px;
+                        display: inline-block;
+                        text-align: center;
+                        line-height: 14px;
+                        margin-right: 8px;
+                        font-size: 18px;
+                    ">●</span> 
+                    <span style="flex-grow: 1;">
+                        ${color.name} : <strong>${nbPerles}</strong> 
+                        <span style="color: #666; font-size: 0.85em; font-style: italic; margin-left: 5px;">
+                            (${nbSachets} sachet${nbSachets > 1 ? 's' : ''})
+                        </span>
+                    </span>
+                </div>`;
+        }
     });
-    document.getElementById('statsPerles').innerHTML = html;
-    document.getElementById('resultats').style.display = 'block';
+
+    const statsPerlesDiv = document.getElementById('statsPerles');
+    if (statsPerlesDiv) {
+        statsPerlesDiv.innerHTML = perlesHTML;
+    }
+
+    const divResultats = document.getElementById('resultats');
+    if (divResultats) {
+        divResultats.style.display = 'block';
+    }
 }
