@@ -1,0 +1,61 @@
+body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    color: white;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.controls {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-top: 20px;
+}
+
+h1 {
+  color: blue;
+}
+
+input {
+  margin: 10px 0px 0px 0px;
+}
+
+label {
+  color: lightgreen;
+}
+
+#resultats {
+  display: none;
+  background: rgba(255, 255, 255, 0.9);
+  color: black;
+  padding: 15px;
+  border-radius: 10px;
+  margin: 20px;
+  text-align: left;
+  max-width: 400px;
+}
+
+p {
+  color: red;
+}
