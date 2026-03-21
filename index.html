@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Pixel Perles Pro</title>
+    <style>
+      body { font-family: sans-serif; text-align: center; }
+      .controls { background: white; padding: 20px; border-radius: 8px; display: inline-block; }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>Générateur d'image pour perles à repasser</h1><br>
+    <p>Remarque: Le téléchargement de l’image généré peut ne pas fonctionner sur certains navigateurs. Si ça ne marche sur votre navigateur, essayez sur Google Chrome.</p>
+    <div class="controls">
+      <input type="file" id="upload" accept="image/*"><br><br>
+      <label>Largeur : </label>
+      <input type="range" id="widthRange" min="29" max="290" step="29" value="29">
+      <span id="widthValue">29</span><br><br>
+      <label>Hauteur : </label>
+      <input type="range" id="heightRange" min="29" max="290" step="29" value="29">
+      <span id="heightValue">29</span>
+      <label><br>
+      <input type="checkbox" id="gridCheck"> Afficher la grille
+      </label>
+    </div><br>
+    <button id="downloadBtn" style="margin-top: 10px; padding: 10px; cursor: pointer; border-radius: 5px; border: none; background: #23a6d5; color: white; font-weight: bold;">Télécharger le modèle (PNG)</button>
+    <div id="resultats">
+      <div id="statsPlaques"></div>
+      <hr>
+      <div id="statsPerles"></div> 
+    </div>
+    <canvas id="canvas"></canvas>
+    <script src="script.js"></script>
+</body>
+</html>
